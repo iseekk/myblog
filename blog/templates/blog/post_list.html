@@ -1,0 +1,78 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block body_block %}
+
+  <!-- Posts, 3 rows, 3 posts in row -->
+  <div class="row">
+    {% for post in post_list %}
+        <div class="col-sm-12 col-md-4 my-3">
+          <a href="{% url 'post_detail' pk=post.pk %}">
+            {% if post.image %}
+              <img src="{{post.image.url}}" class="img-fluid">
+            {% else %}
+              <img src="{% static "img/default_post.jpg" %}" class="img-fluid">
+            {% endif %}
+          </a>
+          <h5 class="card-title mt-4">
+            <a style="color: black" href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+          </h5>
+          <p class="card-text">{{ post.text|safe|truncatechars:165 }}</p>
+          <p class="card-text text-muted">
+            {{ post.author }} – {{ post.published_date|date:"F d, Y" }} –
+            <a class="text-muted" href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
+          </p>
+        </div>
+      {% if forloop.counter|divisibleby:"3" %}
+        </div>
+        <div class="row">
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+    <ul class="pagination">
+
+      <!-- Previous -->
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.previous_page_number}}">&laquo;</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">&laquo;</span>
+        </li>
+      {% endif %}
+
+      <!-- Page numbers -->
+      {% for i in page_obj.paginator.page_range %}
+        {% if i == page_obj.number %}
+          <li class="page-item active">
+            <a class="page-link" href="">{{page_obj.number}}</a>
+          </li>
+        {% elif i|add:"-3" <= page_obj.number and i|add:"3" >= page_obj.number %}
+          <li class="page-item ">
+            <a class="page-link" href="?page={{i}}">{{i}}</a>
+          </li>
+        {% elif i|divisibleby:"10" and i|add:"-30" <= page_obj.number and i|add:"30" >= page_obj.number%}
+          <li class="page-item ">
+            <a class="page-link" href="?page={{i}}">{{i}}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      <!-- Next -->
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.next_page_number}}">&raquo;</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">&raquo;</span>
+        </li>
+      {% endif %}
+    </ul>
+  {% endif %}
+
+{% endblock %}

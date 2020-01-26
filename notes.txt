@@ -1,0 +1,22 @@
+TODO:
+
+Newsletter app
+  model NewsletterUsers
+    email, date_added(datefield(auto_now_add)), string representation = email
+    ?????get_absolute_url??????????????
+
+  form SubscribeForm
+    email
+
+  form NewsletterForm modelform??
+    title, text, post connected with newsletter
+
+  views
+    activate_subscription
+    cancel_subscription
+    send_newsletter
+
+  htmls:
+    subscription_activate.html
+    subscription_unsubscribe.html
+    subscription_form.html  # admin access, create newsletter email and send to all subs

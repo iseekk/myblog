@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+
+{% block body_block %}
+  {% for post in post_list %}
+    <div class="card">
+      <div class="container my-2">
+        <h5 class="card-title">
+          <a style="color: black" href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ post.create_date }} | {{ post.author }}</h6>
+        <hr>
+        <p class="card-text">{{ post.text }}</p>
+      </div>
+    </div>
+    <br>
+  {% empty %}
+    <p class="text-center">There are no drafts!</p>
+  {% endfor %}
+{% endblock %}
