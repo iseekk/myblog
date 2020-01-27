@@ -23,7 +23,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "blog/templates/blog")
 SECRET_KEY = 'g!n^4)!4cq#gcoj5vocdtkam77q8+_q)t))2^!sofib&til2@7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
