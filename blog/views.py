@@ -1,13 +1,14 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
-from django.urls import reverse_lazy
-from blog.models import Post, Comment
-from blog.forms import PostForm, CommentForm
+from blog.models import Post, Comment, Subscriber
+from blog.forms import PostForm, CommentForm, SubscriberForm
+from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import (TemplateView, ListView, DetailView,
                                   CreateView, UpdateView, DeleteView,)
 
@@ -115,3 +116,18 @@ def change_password(request):
     return render(request, 'profile_update.html', {
         'form': form
     })
+
+
+def new_subscriber(request):
+    if request.method == "POST":
+        form = SubscriberForm(request.POST)
+        if form.is_valid() and not Subscriber.objects.filter(email=form.cleaned_data["email"]):
+            sub = form
+            sub.save()
+            messages.success(request, "Thank your for your subscription. The newsletter will be sent to your e-mail address.")
+            return redirect("post_list")
+        else:
+            messages.error(request, "This email address is already registered to the newsletter.")
+    else:
+        form = SubscriberForm()
+    return render(request, "subscription/new.html", {"form": form})

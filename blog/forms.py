@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import forms as auth_forms
-from blog.models import Post, Comment
+from blog.models import Post, Comment, Subscriber
 
 
 class CustomAuthForm(auth_forms.AuthenticationForm):
@@ -29,4 +29,13 @@ class CommentForm(forms.ModelForm):
         widgets = {
             "author": forms.TextInput(),
             "text": forms.Textarea(),
+        }
+
+class SubscriberForm(forms.ModelForm):
+    class Meta:
+        model = Subscriber
+        fields = ("email",)
+
+        widgets = {
+            "email": forms.EmailInput(attrs={"placeholder": "Your email address.."}),
         }

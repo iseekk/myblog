@@ -43,9 +43,16 @@ class Comment(models.Model):
         return reverse("post_list")
 
 
-class NewsletterUser(models.Model):
-    email = models.EmailField(max_length=254)
-    date_added = models.DateField(auto_now_add=True)
+class Subscriber(models.Model):
+    email = models.EmailField(max_length=254, unique=True)
+    date_added = models.DateField()
 
     def __str__(self):
         return self.email
+
+    def get_absolute_url(self):
+        return reverse("post_list")
+
+    def save(self, *args, **kwargs):
+        self.date_added = timezone.now()
+        return super(Subscriber, self).save(*args, **kwargs)
